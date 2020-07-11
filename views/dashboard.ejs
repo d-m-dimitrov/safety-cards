@@ -1,0 +1,133 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    
+    <img src="/img/dnata_big.png" alt="logo" height="20px"><a class="navbar-brand" href="#"></a>
+    <h3><span class="text-warning">Safety cards</span></h3>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+           
+        </li>
+    </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+         
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i> <%= user.name %> </a>
+          <div class="dropdown-menu" aria-labelledby="dropdown01">
+            <a class="dropdown-item" href="#">Change password</a>
+            <a class="dropdown-item" href="/users/logout">Logout</a>
+        </li>
+      </ul>
+
+    </div>
+  </nav>
+
+
+<br>
+<br>
+<br>
+
+<div class="row">
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+            
+          <%switch (progress) {
+            case 0: %>
+              <div class="card-header bg-danger"> <h4>Progress: <strong>No cards</strong></h4></div>
+              <% break;
+            case 100 : %>
+            <div class="card-header bg-success text-light"> <h4>Progress: <strong>All done</strong></h4></div>
+              <% break;
+            default : %>
+            <div class="card-header bg-warning "> <h4>Progress: <strong>Incomplete</strong></h4></div>
+              <% break;
+          } %>
+          
+          
+              
+            
+            <br>
+          
+             <h5 class="card-title">Current month: <span class="curmonth text-primary font-weight-bold text-uppercase float-right"><%= new Date().toLocaleString('default', { month: 'long' });%> <%= new Date().getFullYear();%></span>    </h5>
+          
+          
+          
+          <p class="card-text">
+              Cards: 
+              <%switch (progress) {
+                case 0: %>
+                  <span class="text-danger font-weight-bold "> <%= broi %></span>
+                  <% break;
+                case 100 : %>
+                  <span class="text-success font-weight-bold "> <%= broi %></span>
+                  <% break;
+                default : %>
+                  <span class="text-warning font-weight-bold "> <%= broi %></span>
+                  <% break;
+              } %>
+              / <strong> <%= user.cards %> </strong>
+          </p>
+
+          <div>
+            <progress class="w-100 bk-primary" value="<%= progress %>" max="100"> <%= progress%>% </progress>  
+          </div>
+          
+          <br>
+          <hr>
+          <% if (broi===user.cards) { %>
+            <a href="/cards/add" class="btn btn-primary bg-dark float-right disabled" >New card...</a>
+          <% } else {%>
+            <a href="/cards/add" class="btn btn-primary bg-dark float-right" >New card...</a>
+          <% } %>  
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">My cards</h5>
+          <% if (cards) { %>
+           
+          
+           
+          <table class="table table-sm table-striped">
+              <thead>
+                  <tr>
+                      <th>Date</th>
+                      <th>Location</th>
+                      <th>Observe</th>
+                      <th>Safe?</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <% cards.forEach(card => { %>
+
+                  <tr>
+                      <td><%= card.date.toISOString().substring(0,10);%> </td>
+                      <td><strong><%= card.area %></strong>/<%=card.location %></td>
+                      <td><%= card.observe %></td>
+                      <td>
+                        <% if (card.isitsafe==='safe') { %> 
+                            <span class="text-success"><i class="fa fa-thumbs-up"></i></span> Yes
+                        <% } else { %>
+                          <span class="text-danger"><i class="fa fa-thumbs-down"></i></span> No
+                        <% } %>
+                      </td>
+                  </tr>
+                  <% }) %>
+              </tbody>
+          </table>
+          <% } else { %>
+            <p>You have not created any safety cards</p>
+          <% } %>
+
+          
+        </div>
+      </div>
+    </div>
+  </div>

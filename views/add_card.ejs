@@ -1,0 +1,151 @@
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+      <div class="card card-body">
+        <h1 class="text-center mb-2"><img src="/img/dnata_big.png" alt="logo" height="20px"></h1>
+        <hr>
+        <h1 class="text-center mb-3"><i class="fas fa-list-alt"></i> New safety card</h1>
+        <% include ./partials/messages %>
+        <form action="/cards/add" method="POST">
+          
+            <div class="form-group"> <!-- Date input -->
+                <label class="control-label" for="odate">Date</label>
+                <input class="form-control" id="odate" name="odate" type="date" value="<%= new Date().getFullYear();%>"/>
+            </div>
+
+            <div class="form-group">
+                <label for="area" required>Terminal</label>       
+                <select class="form-control" id="area" name="area">
+                    <option value="T2" selected>T2</option>
+                    <option value="T3">T3</option>
+                    <option value="T4">T4</option>
+                    <option value="T5">T5</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location</label>       
+                <select class="form-control" id="location" name="location">
+                    <option value="Airside road" >Airside Road</option>
+                    <option value="Interstand road">Interstand road</option>
+                    <option value="Stand" selected>Stand</option>
+                    <option value="Taxiways crossing">Taxiways crossing</option>
+                    <option value="Taxiway">Taxiway</option>
+                    <option value="Runway">Runway</option>
+                    <option value="Terminal Check-in area">Terminal Check-in area</option>
+                    <option value="Terminal Gate area">Terminal Gate area</option>
+                    <option value="Jet bridge">Jet Bridge</option>
+                    <option value="Office">Office</option>
+                    <option value="Parking">Parking area</option>
+                    <option value="Public roads">Public roads</option>
+                </select>
+            </div>
+
+          
+            <div class="form-group">
+            <label for="locdetail">Location detail</label>
+            <input type="text" id="locdetail" name="locdetail" class="form-control" placeholder="Location detail" value="<%= typeof locdetail != 'undefined' ? locdetail : '' %>" />
+          </div>
+
+          <div class="form-group">
+            <label for="participant">Participants</label>
+            <input type="number" id="participant" name="participant" class="form-control" min = 0 max = 20 value="<%= typeof participant != 'undefined' ? participant : 1 %>"/>
+          </div>
+          <hr>
+          Is it safe?
+          <div class="float-right">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="isitsafe" id="safe" value="safe" checked>
+            <label class="form-check-label" for="safe"><span class="text-success">Safe</span></label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="isitsafe" id="danger" value="danger">
+            <label class="form-check-label" for="danger"><span class="text-danger">Danger</span></label>
+          </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <label for="observe">Observed activity</label>       
+            <select class="form-control" id="observe" name="observe">
+                <option value="DGR ralated">DGR related</option>
+                <option value="Equipment">Equipment</option>
+                <option value="FOD/Housekeeping" selected>FOD/Housekeeping</option>
+                <option value="Line of Fire">Line of Fire</option>
+                <option value="Manual Handling">Manual Handling</option>
+                <option value="Not Fit for Work">Not Fit for Work</option>
+                <option value="PPE related">PPE related</option>
+                <option value="Slips/Trips/Falls">Slips/Trips/Falls</option>
+                <option value="Working at Height">Working at Height</option>
+                <option value="Driving">Driving</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="oremark">Observation remark</label>
+            <textarea class="form-control" name="oremark" id="oremark" rows="3"></textarea>
+          </div>
+          <hr>
+          Risk
+          <div class="float-right">
+             
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="risk" id="none" value="none" checked>
+              <label class="form-check-label" for="none"><span class="text-success">None</span></label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="risk" id="low" value="low">
+                <label class="form-check-label" for="low"><span class="text-info">Low</span></label>
+              </div>            
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="risk" id="medium" value="medium">
+                <label class="form-check-label" for="medium"><span class="text-warning">Medium</span></label>
+            </div>            
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="risk" id="high" value="high">
+                <label class="form-check-label" for="high"><span class="text-danger">High</span></label>
+            </div>
+          </div>
+          <hr>
+          <div class="form-group">
+            <label for="conseq">Possible consequences</label>       
+            <select class="form-control" id="censeq" name="conseq">
+                <option value="Life danger">Life danger</option>
+                <option value="Injury" selected>Injury</option>
+                <option value="Damage to A/C">Damage to A/C</option>
+                <option value="Equipment damage">Equipment damage</option>
+                <option value="Property damage">Building damage</option>
+                <option value="Inconvenience to customers">Inconvenience to customers </option>
+                <option value="Inconvenience to colleagues">Inconvenience to colleagues </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="cremark">Consequences Remark</label>
+            <textarea class="form-control" name="cremark" id="cremark" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="action">Action taken</label>       
+            <select class="form-control" id="action" name="action">
+                <option value="Advise person/s">Advise person/s</option>
+                <option value="Speak to person" selected>Speak to person/s</option>
+                <option value="Do on my own">Do on my own</option>
+                <option value="Report">Report</option>
+                <option value="None">None</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="aremark">Action Remark</label>
+            <textarea class="form-control" name="aremark" id="aremark" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="remark">Remark</label>
+            <textarea class="form-control" name="remark" id="remark" rows="5"></textarea>
+        </div>
+
+
+          <button type="submit" class="btn btn-primary btn-block">Save card</button>
+        </form>
+        
+      </div>
+    </div>
+  </div>
+  
