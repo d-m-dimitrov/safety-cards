@@ -1,0 +1,159 @@
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+      <div class="card card-body">
+        <h1 class="text-center mb-2"><img src="/img/dnata_big.png" alt="logo" height="20px"></h1>
+        <hr>
+        <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i> Edit/Delete user</h1>
+        <% include ./partials/messages %>
+        <form action="/users/<%=euser._id%>" method="POST">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input
+              type="name"
+              id="name"
+              name="name"
+              class="form-control"
+              placeholder="Enter Name"
+              value="<%= typeof euser.name != 'undefined' ? euser.name : '' %>"
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-control"
+              placeholder="Enter Email"
+              value="<%= typeof euser.email != 'undefined' ? euser.email : '' %>"
+            />
+          </div>
+          <div class="form-group">
+            <label for="name">User ID</label>
+            <input
+              type="text"
+              id="uid"
+              name="uid"
+              class="form-control"
+              placeholder="Enter User ID"
+              value="<%= typeof euser.uid != 'undefined' ? euser.uid : '' %>"
+            />
+          </div>
+
+
+
+          <div class="form-group">
+            <label for="level">Access</label>       
+          
+
+            <select class="form-control" id="level" name="level">
+              <% if (euser.level==="operator") { %>
+                <option value="operator" selected>operator</option>
+                <option value="manager">manager</option>
+                <option value="admin">admin</option>
+              <%} else if (euser.level==="manager") { %>
+                <option value="operator">operator</option>
+                <option value="manager" selected>manager</option>
+                <option value="admin">admin</option>
+              <%} else { %>
+                <option value="operator">operator</option>
+                <option value="manager">manager</option>
+                <option value="admin" selected>admin</option>
+              <% } %>
+            </select>
+
+          </div>
+  
+          <div class="form-group">
+            <label for="name">Cards</label>
+            <input
+              type="number"
+              id="cards"
+              name="cards"
+              class="form-control"
+              placeholder="Enter required cards"
+              min = 0
+              max = 4
+              value="<%= typeof euser.cards != 'undefined' ? euser.cards : 0 %>"
+            />
+          </div>
+          <div class="form-check">
+            <% if (euser.isactive=='on'){ %>
+                <input type="checkbox" name="isactive" id="isactive" checked />
+            <% } else { %>
+                <input type="checkbox" name="isactive" id="isactive"/>
+            <% } %>
+            <label for="isactive">Is Active?</label>
+          </div>
+          <!--
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control"
+              placeholder="Create Password"
+              value="<%= typeof password != 'undefined' ? password : '' %>"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password2">Confirm Password</label>
+            <input
+              type="password"
+              id="password2"
+              name="password2"
+              class="form-control"
+              placeholder="Confirm Password"
+              value="<%= typeof password2 != 'undefined' ? password2 : '' %>"
+            />
+          </div> -->
+
+          <button type="submit" class="btn btn-primary">Save user</button>
+          <a class="btn btn-danger delete-user" href="#" data-id="<%= euser._id%>">Delete user</a>
+          <a class="btn btn-warning clear-password" href="#" data-id="<%= euser._id%>">Reset user password</a>
+        </form>
+       
+      </div>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script>
+    $(document).ready(function(){
+        $('.delete-user').on('click', function(e){
+            $target = $(e.target);
+            const id = $target.attr('data-id');
+            $.ajax({
+                type:'DELETE',
+                url: '/users/'+id,
+                success: function(response){
+                    alert('Deleting User');
+                    window.location.href='/users/showusers';
+                },
+                error: function(err){
+                console.log(err);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function(){
+        $('.clear-password').on('click', function(e){
+            $target = $(e.target);
+            const id = $target.attr('data-id');
+            $.ajax({
+                type:'POST',
+                url: '/users/clr/'+id,
+                success: function(response){
+                    alert('User password was reset to 123');
+                    window.location.href='/users/showusers';
+                },
+                error: function(err){
+                console.log(err);
+                }
+            });
+        });
+    });
+
+  </script>

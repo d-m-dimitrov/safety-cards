@@ -1,8 +1,8 @@
-# Node.js & Passport Login
+# Safety cards
 
-This is a user login and registration app using Node.js, Express, Passport, Mongoose, EJS and some other packages.
+This is a safety card project
 
-### Version: 2.0.0
+### Version: 1.0.0
 
 ### Usage
 

@@ -18,11 +18,4 @@ function strCurMonth() {
   document.getElementsByClassName ("curmonth").innerHTML = n;
 }
 
-function pDate(x){
-  let d = x.getDate().padStart(2, "0");
-  let m = x.getMonth()+1;
-  m.padStart(2,"0");
-  let y = x.getFullYear();
-  const y = [day, month, year].join("/");
-  return y;
-}
+

@@ -18,7 +18,10 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i> <%= user.name %> </a>
           <div class="dropdown-menu" aria-labelledby="dropdown01">
-            <a class="dropdown-item" href="#">Change password</a>
+            <% if (user.level=="admin") { %>
+              <a class="dropdown-item" href="/users/showusers">Users</a>
+            <% } %>
+            <a class="dropdown-item" href="/users/passwords">Change password</a>
             <a class="dropdown-item" href="/users/logout">Logout</a>
         </li>
       </ul>
@@ -31,8 +34,60 @@
 <br>
 <br>
 
+
+<% if (user.level!="operator") { %>
+  <div class="container">
+    <h3>Current performance</h3>
+  </div>
+  
+  <div class="card-group">
+    <div class="card border-light mb-3" style="width: 18rem;">
+      <div class="card-header bg-info text-light"><h5>Performance <span class="text-danger"> <%= done %> / <%= done+remain %> </span></h5> </div>
+      <div class="card-body">
+        <canvas id="cPerformance" width="100%"> </canvas>
+      </div>
+    </div>
+    <div class="card border-light mb-3" style="width: 18rem;">
+      <div class="card-header bg-info text-light"><h5>Areas</h5></div>
+      <div class="card-body" >
+        <canvas id="cArea" width="100%"> </canvas>
+      </div>
+    </div>
+    <div class="card border-light mb-3" style="width: 18rem;">
+      <div class="card-header bg-info text-light"><h5>Locations</h5></div>
+      <div class="card-body">
+        <canvas id="cLoc" width="100%"> </canvas>
+      </div>
+    </div>
+  </div>
+  <div class="card-group">
+    <div class="card border-light mb-3" style="width: 18rem;">
+      <div class="card-header bg-info text-light"><h5>Safe/risk </h5> </div>
+      <div class="card-body">
+        <canvas id="cSafe" width="100%"> </canvas>
+      </div>
+    </div>
+    <div class="card border-light mb-3" style="width: 18rem;">
+      <div class="card-header bg-info text-light"><h5>Risk levels</h5></div>
+      <div class="card-body" >
+        <canvas id="cRisk" width="100%"> </canvas>
+      </div>
+    </div>
+    <div class="card border-light mb-3" style="width: 18rem;">
+      <div class="card-header bg-info text-light"><h5>Observations</h5></div>
+      <div class="card-body">
+        <canvas id="cObs" width="100%"> </canvas>
+      </div>
+    </div>
+  </div>
+<% } %>
+<hr>
+<% if (user.cards != 0) { %>
+<div class="container">
+  <h3>My performance</h3>
+</div>
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-12">
       <div class="card">
         <div class="card-body">
             
@@ -85,49 +140,233 @@
             <a href="/cards/add" class="btn btn-primary bg-dark float-right" >New card...</a>
           <% } %>  
         </div>
-      </div>
-    </div>
-    <div class="col-sm-8">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">My cards</h5>
-          <% if (cards) { %>
-           
-          
-           
-          <table class="table table-sm table-striped">
-              <thead>
-                  <tr>
-                      <th>Date</th>
-                      <th>Location</th>
-                      <th>Observe</th>
-                      <th>Safe?</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <% cards.forEach(card => { %>
+      
+        
+      <% if (cards) { %>
 
-                  <tr>
-                      <td><%= card.date.toISOString().substring(0,10);%> </td>
-                      <td><strong><%= card.area %></strong>/<%=card.location %></td>
-                      <td><%= card.observe %></td>
-                      <td>
-                        <% if (card.isitsafe==='safe') { %> 
-                            <span class="text-success"><i class="fa fa-thumbs-up"></i></span> Yes
-                        <% } else { %>
-                          <span class="text-danger"><i class="fa fa-thumbs-down"></i></span> No
-                        <% } %>
-                      </td>
-                  </tr>
-                  <% }) %>
-              </tbody>
-          </table>
-          <% } else { %>
-            <p>You have not created any safety cards</p>
-          <% } %>
-
-          
-        </div>
-      </div>
+           
+           <table class="table table-sm table-striped">
+               <thead>
+                   <tr>
+                       <th>Date</th>
+                       <th>Location</th>
+                       <th>Observe</th>
+                       <th>Safe?</th>
+                   </tr>
+               </thead>
+               <tbody>
+                   <% cards.forEach(card => { %>
+ 
+                   <tr>
+                       <td><%= card.date.toISOString().substring(0,10);%> </td>
+                       <td><strong><%= card.area %></strong>/<%=card.location %></td>
+                       <td><%= card.observe %></td>
+                       <td>
+                         <% if (card.isitsafe==='safe') { %> 
+                             <span class="text-success"><i class="fa fa-thumbs-up"></i></span> Yes
+                         <% } else { %>
+                           <span class="text-danger"><i class="fa fa-thumbs-down"></i></span> No
+                         <% } %>
+                       </td>
+                   </tr>
+                   <% }) %>
+               </tbody>
+           </table>
+           <% } else { %>
+             <p>You have not created any safety cards</p>
+           <% } %>
+ 
     </div>
-  </div>
+    
+    <% } %>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js" integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q==" crossorigin="anonymous"></script>
+    <script>
+  
+   
+
+
+
+      let myChart = document.getElementById('cPerformance').getContext('2d');
+      let c2 = document.getElementById('cArea').getContext('2d');
+      let c3 = document.getElementById('cLoc').getContext('2d');
+      let c4 = document.getElementById('cSafe').getContext('2d');
+      let c5 = document.getElementById('cRisk').getContext('2d');
+      let c6 = document.getElementById('cObs').getContext('2d');
+
+      const al = '<%- JSON.stringify(alabels) %>';
+      const ad = '<%- JSON.stringify(adata) %>';
+
+      const ll = '<%- JSON.stringify(llabels) %>';
+      const ld = '<%- JSON.stringify(ldata) %>';
+
+      
+      const ol = '<%- JSON.stringify(olabels) %>';
+      const od = '<%- JSON.stringify(odata) %>';
+
+      Chart.scaleService.updateScaleDefaults('linear', {ticks: {min: 0}});
+
+
+      let massPopChart = new Chart(myChart, {
+        type:'doughnut', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        data:{    
+          labels:['Done', 'Remain'],
+          datasets:[{
+            data:[
+              '<%= done%>',
+              '<%= remain%>'
+            ],
+            //backgroundColor:'green',
+            backgroundColor:[
+              'green',
+              'red'
+            ],
+            borderWidth: 1,
+            borderColor:'#777',
+            hoverBorderWidth:3,
+            hoverBorderColor:'#000'
+          }]
+        },
+        options:{
+          tooltips:{
+            enabled:true
+          }
+        }
+      });
+
+
+      let massPopChart1 = new Chart(c2, {
+        type:'pie', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        data:{
+            labels: JSON.parse(al),
+            datasets:[{
+            data: JSON.parse(ad),
+            //backgroundColor:'green',
+            backgroundColor: ['deepskyblue', 'lightblue', 'steelblue', 'aqua'],
+            borderWidth: 1,
+            borderColor:'#777',
+            hoverBorderWidth:3,
+            hoverBorderColor:'#000'
+          }]
+        },
+        options:{
+          tooltips:{
+            enabled:true
+          },
+          legend:{
+            display:false
+          }
+        }
+      });
+
+      let massPopChart2 = new Chart(c3, {
+        type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        data:{
+            labels: JSON.parse(ll),
+            datasets:[{
+            data: JSON.parse(ld),
+            //backgroundColor:'green',
+            backgroundColor: ['orange','indigo', 'azure','tomato','green', 'gold', 'navy', 'lime', 'darkred', 'beige', 'brown', 'pink'],
+            borderWidth: 1,
+            borderColor:'#777',
+            hoverBorderWidth:3,
+            hoverBorderColor:'#000'
+          }]
+        },
+        options:{
+          tooltips:{
+            enabled:true
+          },
+          legend:{
+            display: false
+          }
+        }
+      });
+
+      let massPopChart3 = new Chart(c4, {
+        type:'pie', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        data:{    
+          labels:['Safe', 'Danger'],
+          datasets:[{
+            data:[
+              '<%= safe%>',
+              '<%= danger%>'
+            ],
+            //backgroundColor:'green',
+            backgroundColor:[
+              'lightblue',
+              'tomato'
+            ],
+            borderWidth: 1,
+            borderColor:'#777',
+            hoverBorderWidth:3,
+            hoverBorderColor:'#000'
+          }]
+        },
+        options:{
+          tooltips:{
+            enabled:true
+          }
+        }
+      });
+
+
+      let massPopChart4 = new Chart(c5, {
+        type:'polarArea', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        data:{    
+          labels:['None', 'Low', 'Medium', 'High' ],
+          datasets:[{
+            data:[
+              '<%= non%>',
+              '<%= lw%>',
+              '<%= med%>',
+              '<%= hi%>'
+            ],
+            //backgroundColor:'green',
+            backgroundColor:[
+              'rgba(0,200,0,0.3)',
+              'rgba(255,255,0,0.3)',
+              'rgba(255,145,0,0.3)',
+              'rgb(255,0,0,0.3)'
+            ],
+            borderWidth: 1,
+            borderColor:'#777',
+            hoverBorderWidth:3,
+            hoverBorderColor:'#000'
+          }]
+        },
+        options:{
+          tooltips:{
+            enabled:true
+          },
+          legend:{
+            display:false
+          }
+        }
+      });
+
+      let massPopChart5 = new Chart(c6, {
+        type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        data:{
+            labels: JSON.parse(ol),
+            datasets:[{
+            data: JSON.parse(od),
+            //backgroundColor:'green',
+            backgroundColor: ['tomato','aqua', 'gold', 'navy', 'lime', 'darkred', 'beige', 'brown', 'pink', 'teal'],
+            borderWidth: 1,
+            borderColor:'#777',
+            hoverBorderWidth:3,
+            hoverBorderColor:'#000'
+          }]
+        },
+        options:{
+          tooltips:{
+            enabled:true
+          },
+          legend:{
+            display: false
+          }
+        }
+      });
+
+    </script>

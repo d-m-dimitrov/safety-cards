@@ -42,8 +42,9 @@
         <div class="form-group">
           <label for="level">Access</label>       
           <select class="form-control" id="level" name="level">
-            <option value="opertor" selected>Operator</option>
-            <option value="manager">Manager</option>
+            <option value="operator" selected>operator</option>
+            <option value="manager">manager</option>
+            <option value="admin">admin</option>
           </select>
 
         </div>
@@ -65,6 +66,7 @@
           <input type="checkbox" name="isactive" id="isactive" checked />
           <label for="isactive">Is Active?</label>
         </div>
+        <!--
         <div class="form-group">
           <label for="password">Password</label>
           <input
@@ -86,12 +88,14 @@
             placeholder="Confirm Password"
             value="<%= typeof password2 != 'undefined' ? password2 : '' %>"
           />
-        </div>
+        </div> -->
+        <input type="hidden" id="password" name="password" value="123">
+        <input type="hidden" id="password2" name="password2" value="123">
         <button type="submit" class="btn btn-primary btn-block">
           Register
         </button>
       </form>
-      <p class="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
+     
     </div>
   </div>
 </div>
