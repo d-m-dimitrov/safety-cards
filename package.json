@@ -1,5 +1,5 @@
 {
-  "name": "dnata Safety cards",
+  "name": "dnata-safety-cards",
   "version": "1.0.0",
   "description": "dnata Safety card registration and monitoring",
   "main": "app.js",
