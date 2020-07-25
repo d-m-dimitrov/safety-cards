@@ -151,14 +151,10 @@ try {
   });
   
 
-
-
-
   let progress = Math.floor(broi/req.user.cards*100);
   
   
-  
-  
+    
   res.render('dashboard', {
     month: d.getMonth(),
     broi: broi,
