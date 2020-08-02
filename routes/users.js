@@ -15,11 +15,11 @@ router.get('/register', forwardAuthenticated, (req, res) => res.render('register
 // Register
 router.post('/register', (req, res) => {
   
-  const { name, email, uid, level, cards, isactive, password, password2  } = req.body;
+  const { name, email, dep, uid, level, cards, isactive, password, password2  } = req.body;
   let errors = [];
   
 
-  if (!name || !email || !uid || !level || !cards || !isactive ) {
+  if (!name || !email || !uid || !level || !cards || !isactive || !dep ) {
     errors.push({ msg: 'Please enter all fields' });
   }
 
@@ -36,6 +36,7 @@ router.post('/register', (req, res) => {
       errors,
       name,
       email,
+      dep,
       uid,
       level,
       cards, 
@@ -51,6 +52,7 @@ router.post('/register', (req, res) => {
           errors,
           name,
           email,
+          dep,
           uid,
           level,
           cards, 
@@ -62,6 +64,7 @@ router.post('/register', (req, res) => {
         const newUser = new User({
           name,
           email,
+          dep,
           uid,
           level,
           cards, 
@@ -163,6 +166,7 @@ router.post('/:id', function(req, res){
   let euser = {};
   euser.name = req.body.name;
   euser.email = req.body.email;
+  euser.dep = req.body.dep;
   euser.uid = req.body.uid;
   euser.level = req.body.level;
   euser.isactive = req.body.isactive;

@@ -1,5 +1,5 @@
-<div class="row mt-5">
-    <div class="col-md-8 m-auto">
+<div class="row mt-3">
+    <div class="col-md-10 m-auto">
       <div class="card card-body">
         <h2 class="text-right mb-2"><img src="/img/dnata_big.png" alt="logo" height="20px"></h2>
         <hr>
@@ -13,10 +13,10 @@
             </div>
             <input class="form-control my-0 py-1" type="text" id="myInput" placeholder="Search" aria-label="Search">
             <div class="input-group-append">
-                <a class="btn btn-outline-primary" href="/users/register">Add new </a>
+                <a class="btn btn-outline-primary" href="/users/register"><i class="fas fa-user-plus"></i> Add new </a>
               </div>
               <div class="input-group-append">
-                <a class="btn btn-success" href="/dashboard">Dashboard</a>
+                <a class="btn btn-danger" href="/dashboard"><i class="fa fa-backward" aria-hidden="true"></i> Back</a>
               </div>
           </div>
         <table class="table table-hover" id="tableUsers">
@@ -25,9 +25,10 @@
                     <th onclick="sortTable(0)"> ID</th>
                     <th onclick="sortTable(1)"> Name</th>
                     <th onclick="sortTable(2)"> eMail</th>
-                    <th onclick="sortTable(3)"> Level</th>
-                    <th onclick="sortTable(4)"> Cards</th>
-                    <th onclick="sortTable(5)"> Active?</th>
+                    <th onclick="sortTable(3)"> Department</th>
+                    <th onclick="sortTable(4)"> Level</th>
+                    <th onclick="sortTable(5)"> Cards</th>
+                    <th onclick="sortTable(6)"> Active?</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,7 +38,14 @@
                             <td><a href="/users/<%= user._id%>"> <%= user.uid%> </a></td>
                             <td><%= user.name%></td>                        
                             <td><%= user.email%></td>
-                            <td><%= user.level%></td>
+                            <td><%= user.dep%></td>
+                            <% if (user.level=== 'admin') { %>
+                              <td class="text-danger font-weight-bold"><%= user.level%></td>
+                            <% } else if (user.level === 'manager') {%>
+                              <td class="text-primary font-weight-bold"><%= user.level%></td>
+                            <% } else {%>
+                              <td class="font-weight-bold"><%= user.level%></td>
+                            <%}%>
                             <td><%= user.cards%></td>
                             <td class="text-success"><strong>Yes</strong></td>
                         </tr>
@@ -46,7 +54,14 @@
                             <td><a href="/users/<%= user._id%>"> <%= user.uid%> </a></td>
                             <td><%= user.name%></td>                        
                             <td><%= user.email%></td>
-                            <td><%= user.level%></td>
+                            <td><%= user.dep%></td>
+                            <% if (user.level=== 'admin') { %>
+                              <td class="text-danger font-weight-bold"><%= user.level%></td>
+                            <% } else if (user.level === 'manager') {%>
+                              <td class="text-primary font-weight-bold"><%= user.level%></td>
+                            <% } else {%>
+                              <td class="font-weight-bold"><%= user.level%></td>
+                            <%}%>
                             <td><%= user.cards%></td>
                             <td class="text-danger"><strong>No</strong></td>
                         </tr>  

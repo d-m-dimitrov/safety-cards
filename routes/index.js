@@ -12,14 +12,18 @@ router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
 
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, async (req, res) =>{ 
-try {
-  const cards = await Card.find({ uid: req.user.uid }).sort({_id:-1}).limit(4);
+
+  try {
+  
   let broi = 0;
   const d = new Date();
   
+  const cards = await Card.find({ uid: req.user.uid,"$expr": { "$eq": [{ "$month": "$date" }, d.getMonth()+1] } }).sort({_id:-1}).limit(4);
+
   const cardsall = await Card.find({"$expr": { "$eq": [{ "$month": "$date" }, d.getMonth()+1] } }).count();
-  const cardstotal = await User.aggregate([{ $group: { _id: null, cards: { $sum: "$cards" }}}]);
   
+  const cardstotal = await User.aggregate([{ $group: { _id: null, cards: { $sum: "$cards" }}}]);
+ 
   const area = await Card.aggregate([
     {
       $match : {"$expr": { "$eq": [{ "$month": "$date" }, d.getMonth()+1] } }
@@ -38,7 +42,7 @@ try {
 
    const alabels = [];
    const adata = [];
-   
+
    area.forEach(ar => {
     alabels.push(ar._id);
     adata.push(ar.count);
@@ -68,6 +72,8 @@ try {
     ldata.push(loc.count);
    });
   
+   
+
    const isafe = await Card.aggregate([
     {
       $match : {"$expr": { "$eq": [{ "$month": "$date" }, d.getMonth()+1] } }
@@ -84,9 +90,22 @@ try {
     }
    ]);
 
-   const danger = JSON.parse(isafe[0].count);
-   const safe = JSON.parse(isafe[1].count);
+   let danger = 0;
+   let safe = 0;
+   isafe.forEach(isa =>{
+      switch (isa._id){
+        case "safe":
+          safe = isa.count;
+          break;
+        case "danger":
+          danger = isa.count;
+          break;
+      }
+   
+   });
 
+  
+ 
    const risk = await Card.aggregate([
     {
       $match : {"$expr": { "$eq": [{ "$month": "$date" }, d.getMonth()+1] } }
@@ -103,12 +122,41 @@ try {
     }
    ]);
 
-   const non = JSON.parse(risk[3].count);
-   const lw = JSON.parse(risk[1].count);
-   const med = JSON.parse(risk[2].count);
-   const hi = JSON.parse(risk[0].count);
+   let non = 0;
+   let lw = 0;
+   let med = 0;
+   let hi = 0;
 
-  
+   risk.forEach(ri =>{
+    switch (ri._id){
+      case "none":
+        non = ri.count;
+        break;
+      case "low":
+        lw = ri.count;
+        break;
+      case "medium":
+        med = ri.count;
+        break;
+      case "high":
+        hi = ri.count;
+        break;
+    }
+   });
+
+
+
+
+   //if (risk[3] != undefined){ non = JSON.parse(risk[3].count); }
+   //if (risk[1] != undefined){ lw = JSON.parse(risk[1].count); }
+   //if (risk[3] != undefined){ med = JSON.parse(risk[2].count); }
+   //if (risk[3] != undefined){ hi = JSON.parse(risk[0].count); }
+   //const non = JSON.parse(risk[3].count);
+   //const lw = JSON.parse(risk[1].count);
+   //const med = JSON.parse(risk[2].count);
+   //const hi = JSON.parse(risk[0].count);
+
+ // console.log(med);
    const observe = await Card.aggregate([
     {
       $match : {"$expr": { "$eq": [{ "$month": "$date" }, d.getMonth()+1] } }
@@ -125,6 +173,7 @@ try {
     }
    ]);
 
+   
    const olabels = [];
    const odata = [];
    
@@ -133,15 +182,7 @@ try {
     odata.push(ob.count);
    }); 
 
-
-
-
-
-
-
-
-
-
+   
 
 
   cards.forEach(card => {
@@ -153,7 +194,26 @@ try {
 
   let progress = Math.floor(broi/req.user.cards*100);
   
-  
+ 
+// Year report ----------------
+
+const yrep = await Card.aggregate([
+  {$group: {
+      _id: {$month: "$date"}, 
+      cards: {$sum: 1} 
+  }}
+]);
+
+let ydata = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+yrep.forEach(yr =>{
+  ydata[yr._id-1] = yr.cards
+});
+
+
+//console.log(yrep);
+
+// -----------------------
     
   res.render('dashboard', {
     month: d.getMonth(),
@@ -173,6 +233,7 @@ try {
     hi: hi,
     olabels: olabels,
     odata: odata,
+    ydata: ydata,
     cards
   })
 } catch (err) {

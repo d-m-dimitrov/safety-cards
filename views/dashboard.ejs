@@ -80,6 +80,13 @@
       </div>
     </div>
   </div>
+  <div class="card border-light mb-3">
+    <div class="card-header bg-info text-light"><h5>Yearly performance</h5></div>
+    <div class="card-body">
+      <canvas id="cYear" width="100%"> </canvas>
+    </div>
+  </div>
+  
 <% } %>
 <hr>
 <% if (user.cards != 0) { %>
@@ -158,7 +165,7 @@
                    <% cards.forEach(card => { %>
  
                    <tr>
-                       <td><%= card.date.toISOString().substring(0,10);%> </td>
+                       <td><a href="/cards/<%=card._id%>"><%= card.date.toISOString().substring(0,10);%></a></td>
                        <td><strong><%= card.area %></strong>/<%=card.location %></td>
                        <td><%= card.observe %></td>
                        <td>
@@ -180,6 +187,7 @@
     
     <% } %>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js" integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q==" crossorigin="anonymous"></script>
     <script>
   
@@ -193,6 +201,7 @@
       let c4 = document.getElementById('cSafe').getContext('2d');
       let c5 = document.getElementById('cRisk').getContext('2d');
       let c6 = document.getElementById('cObs').getContext('2d');
+      let cy = document.getElementById('cYear').getContext('2d');
 
       const al = '<%- JSON.stringify(alabels) %>';
       const ad = '<%- JSON.stringify(adata) %>';
@@ -203,6 +212,8 @@
       
       const ol = '<%- JSON.stringify(olabels) %>';
       const od = '<%- JSON.stringify(odata) %>';
+      
+      const yd = '<%- JSON.stringify(ydata) %>';
 
       Chart.scaleService.updateScaleDefaults('linear', {ticks: {min: 0}});
 
@@ -249,15 +260,37 @@
             hoverBorderColor:'#000'
           }]
         },
+        
         options:{
           tooltips:{
             enabled:true
           },
           legend:{
             display:false
+          },
+          onClick: function (e) {
+            debugger;
+            var activePointLabel = this.getElementsAtEvent(e)[0]._model.label;
+            
+            const url = '/cards/reports/area/' + activePointLabel;
+            //alert(url);
+            $.ajax({
+              type: 'GET',
+              url: url,
+              success: function(response){
+                    //alert('Deleting User');
+                    window.location.href=url;
+                },
+              error: function(err){
+                console.log(err);
+              }
+            });
           }
         }
       });
+
+    
+
 
       let massPopChart2 = new Chart(c3, {
         type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
@@ -279,6 +312,24 @@
           },
           legend:{
             display: false
+          },
+          onClick: function (e) {
+            debugger;
+            var activePointLabel = this.getElementsAtEvent(e)[0]._model.label;
+            
+            const url = '/cards/reports/loc/' + activePointLabel;
+            //alert(url);
+            $.ajax({
+              type: 'GET',
+              url: url,
+              success: function(response){
+                    //alert('Deleting User');
+                    window.location.href=url;
+                },
+              error: function(err){
+                console.log(err);
+              }
+            });
           }
         }
       });
@@ -306,6 +357,27 @@
         options:{
           tooltips:{
             enabled:true
+          },
+          legend:{
+            display: false
+          },
+          onClick: function (e) {
+            debugger;
+            var activePointLabel = this.getElementsAtEvent(e)[0]._model.label;
+            
+            const url = '/cards/reports/safe/' + activePointLabel;
+            //alert(url);
+            $.ajax({
+              type: 'GET',
+              url: url,
+              success: function(response){
+                    //alert('Deleting User');
+                    window.location.href=url;
+                },
+              error: function(err){
+                console.log(err);
+              }
+            });
           }
         }
       });
@@ -341,6 +413,24 @@
           },
           legend:{
             display:false
+          },
+          onClick: function (e) {
+            debugger;
+            var activePointLabel = this.getElementsAtEvent(e)[0]._model.label;
+            
+            const url = '/cards/reports/risk/' + activePointLabel;
+            //alert(url);
+            $.ajax({
+              type: 'GET',
+              url: url,
+              success: function(response){
+                    //alert('Deleting User');
+                    window.location.href=url;
+                },
+              error: function(err){
+                console.log(err);
+              }
+            });
           }
         }
       });
@@ -365,8 +455,52 @@
           },
           legend:{
             display: false
+          },
+          onClick: function (e) {
+            debugger;
+            var activePointLabel = this.getElementsAtEvent(e)[0]._model.label;
+            
+            const url = '/cards/reports/observe/' + activePointLabel;
+            //alert(url);
+            $.ajax({
+              type: 'GET',
+              url: url,
+              success: function(response){
+                    //alert('Deleting User');
+                    window.location.href=url;
+                },
+              error: function(err){
+                console.log(err);
+              }
+            });
           }
         }
       });
+
+      let massPopChart6 = new Chart(cy, {
+        type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        data:{
+            labels: ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec' ],
+            datasets:[{
+            data: JSON.parse(yd),
+            //backgroundColor:'green',
+            backgroundColor: 'lawngreen',
+            borderWidth: 1,
+            borderColor:'#777',
+            hoverBorderWidth:3,
+            hoverBorderColor:'#000'
+          }]
+        },
+        options:{
+          tooltips:{
+            enabled:true
+          },
+          legend:{
+            display: false
+          }
+    
+        }
+      });
+
 
     </script>

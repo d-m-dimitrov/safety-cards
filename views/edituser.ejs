@@ -29,7 +29,18 @@
             />
           </div>
           <div class="form-group">
-            <label for="name">User ID</label>
+            <label for="dep">Department</label>       
+            <select class="form-control" id="dep" name="dep">
+              <option value="Operations" selected>Operations</option>
+              <option value="Ramp service">Ramp service</option>
+              <option value="Customer service">Customer service</option>
+              <option value="Cargo">Cargo</option>
+              <option value="Management">Management</option>
+            </select>
+  
+          </div>
+          <div class="form-group">
+            <label for="uid">User ID</label>
             <input
               type="text"
               id="uid"
@@ -109,9 +120,9 @@
             />
           </div> -->
 
-          <button type="submit" class="btn btn-primary">Save user</button>
-          <a class="btn btn-danger delete-user" href="#" data-id="<%= euser._id%>">Delete user</a>
-          <a class="btn btn-warning clear-password" href="#" data-id="<%= euser._id%>">Reset user password</a>
+          <button type="submit" class="btn btn-primary"><i class="fa fa-save" aria-hidden="true"></i> Save user</button>
+          <a class="btn btn-danger delete-user" href="#" data-id="<%= euser._id%>"><i class="fa fa-trash" aria-hidden="true"></i> Delete user</a>
+          <a class="btn btn-warning clear-password" href="#" data-id="<%= euser._id%>"><i class='fas fa-user-lock' aria-hidden="true"></i> Reset user password</a>
         </form>
        
       </div>

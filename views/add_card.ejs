@@ -10,6 +10,8 @@
             <div class="form-group"> <!-- Date input -->
                 <label class="control-label" for="odate">Date</label>
                 <input class="form-control" id="odate" name="odate" type="date" value="<%= new Date().getFullYear();%>"/>
+                <label class="control-label" for="otime">Time</label>
+                <input class="form-control" id="otime" name="otime" type="time" />
             </div>
 
             <div class="form-group">
@@ -50,6 +52,10 @@
             <label for="participant">Participants</label>
             <input type="number" id="participant" name="participant" class="form-control" min = 0 max = 20 value="<%= typeof participant != 'undefined' ? participant : 1 %>"/>
           </div>
+          <div class="form-group">
+            <label for="activity">Activity at the time</label>
+            <input type="text" id="activity" name="activity" class="form-control" placeholder="Activity at the time" value="<%= typeof activity != 'undefined' ? activity : '' %>" />
+          </div>
           <hr>
           Is it safe?
           <div class="float-right">
@@ -66,20 +72,23 @@
         <div class="form-group">
             <label for="observe">Observed activity</label>       
             <select class="form-control" id="observe" name="observe">
-                <option value="DGR ralated">DGR related</option>
-                <option value="Equipment">Equipment</option>
-                <option value="FOD/Housekeeping" selected>FOD/Housekeeping</option>
-                <option value="Line of Fire">Line of Fire</option>
-                <option value="Manual Handling">Manual Handling</option>
-                <option value="Not Fit for Work">Not Fit for Work</option>
-                <option value="PPE related">PPE related</option>
-                <option value="Slips/Trips/Falls">Slips/Trips/Falls</option>
-                <option value="Working at Height">Working at Height</option>
-                <option value="Driving">Driving</option>
+                <option value="Dangerous goods" >Dangerous goods</option>
+                <option value="Equipment" >Equipment</option>
+                <option value="Hand & power tools" >Hand & power tools</option>
+                <option value="FODHousekeeping" selected>FOD/Housekeeping</option>
+                <option value="Line of fire">Line of fire</option>
+                <option value="Manual handling">Manual handling</option>
+                <option value="Not fit for work">Not fit for work</option>
+                <option value="PPE">PPE</option>
+                <option value="Slips/trips/falls">Slips/trips/falls</option>
+                <option value="Working at height">Working at height</option>
+                <option value="Falling objects">Falling objects</option>
+                <option value="Road safety">Road safety</option>
+                <option value="Other">Other</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="oremark">Observation remark</label>
+            <label for="oremark">Observation remarks</label>
             <textarea class="form-control" name="oremark" id="oremark" rows="3"></textarea>
           </div>
           <hr>
@@ -112,8 +121,9 @@
                 <option value="Damage to A/C">Damage to A/C</option>
                 <option value="Equipment damage">Equipment damage</option>
                 <option value="Property damage">Building damage</option>
-                <option value="Inconvenience to customers">Inconvenience to customers </option>
-                <option value="Inconvenience to colleagues">Inconvenience to colleagues </option>
+                <option value="Inconvenience to customers">Inconvenience to customers</option>
+                <option value="Inconvenience to colleagues">Inconvenience to colleagues</option>
+                <option value="Other">Other</option>
             </select>
         </div>
         <div class="form-group">
@@ -129,6 +139,7 @@
                 <option value="Do on my own">Do on my own</option>
                 <option value="Report">Report</option>
                 <option value="None">None</option>
+                <option value="Other">Other</option>
             </select>
         </div>
         <div class="form-group">

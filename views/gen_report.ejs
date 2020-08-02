@@ -1,0 +1,183 @@
+<div class="row mt-3">
+    <div class="col-md-10 m-auto">
+      <div class="card card-body">
+        <h2 class="text-right mb-2"><img src="/img/dnata_big.png" alt="logo" height="20px"></h2>
+        <hr>
+        <h1 class="text-center mb-3"><i class="fas fa-file"></i>  <%= title%> </h1>
+        <p class="text-center text-secondary"> current month:  <strong><%=subtitle%></strong></p>
+        <% include ./partials/messages %>
+        
+        <div class="input-group md-form form-sm form-1 pl-0">
+            <div class="input-group-prepend">
+              <span class="input-group-text blue lighten-3" id="findString"><i class="fas fa-search text-white"
+                  aria-hidden="true"></i></span>
+            </div>
+            <input class="form-control my-0 py-1" type="text" id="myInput" placeholder="Search" aria-label="Search">
+              <div class="input-group-append">
+                <a class="btn btn-danger" href="/dashboard"><i class="fa fa-backward" aria-hidden="true"></i> Back</a>
+              </div>
+              <div class="input-group-append">
+                <a class="btn btn-warning" href="#" onclick="printDiv('tReport')"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
+              </div>
+              <div class="input-group-append">
+                <a class="btn btn-success" href="#" onclick="exportTableToExcel('tReport', 'report')"><i class="fa fa-file-excel" aria-hidden="true"></i> Excel</a>
+              </div>
+          </div>
+        <div style="overflow-x:auto;">
+        <table class="table table-hover" id="tReport">
+            <thead class="bg-light">
+                <tr>
+                    <th onclick="sortTable(0)"> Date/time</th>
+                    <th onclick="sortTable(1)"> Location</th>
+                    <th onclick="sortTable(2)"> Risk</th>
+                    <th onclick="sortTable(3)"> Observed activity</th>
+                    <th onclick="sortTable(4)"> Possible consequences</th>
+                    <th onclick="sortTable(5)"> Action taken</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <% rcards.forEach(card => { %>
+ 
+                    <tr>
+                        <td><a href="/cards/<%=card._id%>"><%= card.odate.toDateString() + ' ' + card.otime;%></a></td>
+                        <td><strong><%= card.area %></strong>/<%=card.location %></td>
+                        <td>
+                          <% if (card.isitsafe==='safe') { %> 
+                              <span class="text-success"><i class="fa fa-thumbs-up"></i></span> <%= card.risk %>
+                          <% } else { %>
+                            <% if (card.risk === 'high') {%>
+                                <span class="text-danger"><i class="fa fa-exclamation-triangle"></i></span> high
+                            <%} else if (card.risk === 'medium') {%>
+                                <span class="text-warning"><i class="fa fa-exclamation-triangle"></i></span> medium
+                            <%} else {%>
+                                <span class="text-info"><i class="fa fa-exclamation-triangle"></i></span> low
+                            <% } %>
+                          <% } %>
+                        </td>
+                        <td><%= card.observe %></td>
+                        <td><%= card.conseq %></td>
+                        <td><%= card.action %></td>
+                        
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+
+  <script>
+function sortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("tableUsers");
+  switching = true;
+  //Set the sorting direction to ascending:
+  dir = "asc";
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      /*check if the two rows should switch place,
+      based on the direction, asc or desc:*/
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          //if so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          //if so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      //Each time a switch is done, increase this count by 1:
+      switchcount ++;
+    } else {
+      /*If no switching has been done AND the direction is "asc",
+      set the direction to "desc" and run the while loop again.*/
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+
+
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#tReport tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+
+
+
+function exportTableToExcel(tableID, filename = ''){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+    // Specify file name
+    filename = filename?filename+'.xls':'excel_data.xls';
+    
+    // Create download link element
+    downloadLink = document.createElement("a");
+    
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    
+        // Setting the file name
+        downloadLink.download = filename;
+        
+        //triggering the function
+        downloadLink.click();
+    }
+}
+
+function printDiv(divName) {
+    var divText = document.getElementById(divName).outerHTML;
+    var win = window.open('','Print report');
+    win.document.write(divText);
+    //win.document.body.style.fontFamily="Abel, sans-serif";
+    win.print();
+    win.close();
+}
+
+
+  </script>

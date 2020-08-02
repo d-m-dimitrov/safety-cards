@@ -13,6 +13,10 @@ const CardSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  otime: {
+    type: String,
+    required: true
+  },
   area: {
     type: String,
     required: true
@@ -28,6 +32,10 @@ const CardSchema = new mongoose.Schema({
   participant: {
     type: Number,
     required: true
+  },
+  activity: {
+    type: String,
+    required: false
   },
   isitsafe: {
     type: String,

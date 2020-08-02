@@ -17,6 +17,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  dep:{
+    type: String,
+    required: true
+  },
   cards: {
     type: Number,
     required: true

@@ -1,0 +1,143 @@
+<div class="row mt-3">
+    
+    
+    <div class="col-md-10 m-auto">
+    <div class="input-group mb-3">
+        <div class="input-group-append">
+            <a class="btn btn-danger" href="#" onclick="goBack()"><i class="fa fa-backward" aria-hidden="true"></i> Back </a>
+          </div>
+          <div class="input-group-append">
+            <a class="btn btn-warning" href="#" onclick="printDiv('sc')"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
+          </div>
+        </div>
+      <div class="card card-body" id="sc">
+        <h1 class="text-right"><img src="/img/dnata_big.png" alt="logo" height="50px"></h1>
+        <h1 class="text-center mb-2 "> <span class="text-dark">  Safety Card</span></h1>
+        <% include ./partials/messages %>
+        <hr>
+        <div class="container-fluid">
+            <h5>General data</h5>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    Observed on: <strong class="text-primary hand"> <%= scard.odate.toDateString()%> </strong>
+                </div>
+                <div class="col-md-6">
+                    Time: <strong class="text-primary hand"> <%= scard.otime%> </strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">Area: <strong class="text-primary hand"> <%= scard.area%> </strong></div>
+                <div class="col-sm-4">Location: <strong class="text-primary hand"> <%= scard.location%> </strong></div>
+                <div class="col-sm-5">Detailed: <strong class="text-primary hand"> <%= scard.locdetail%> </strong></div>
+            </div>
+            <hr>
+            <div>Activity at the time: <strong class="text-primary hand"> <%= scard.activity%> </strong></div>
+            <hr>
+            <div class="row">
+                <div class="col-md-3">Participants: <strong class="text-primary hand"> <%= scard.participant%> </strong></div>
+                <div class="col-md-4">Safe/danger: 
+                    <% if (scard.isitsafe==='safe') { %> 
+                        <strong class="text-success hand"> Safe </strong>
+                    <% } else { %>
+                        <strong class="text-danger hand"> Danger </strong>
+                    <% } %>
+                </div>
+                <div class="col-md-5">Risk level: 
+                    <% if (scard.risk === 'none' ) {%>
+                        <strong class="text-success hand"> <%= scard.risk%> </strong>
+                    <%} else if (scard.risk === 'low') {%>
+                        <strong class="text-info hand"> <%= scard.risk%> </strong>
+                    <%} else if (scard.risk === 'medium') {%>
+                        <strong class="text-warning hand"> <%= scard.risk%> </strong>
+                    <%} else {%>
+                        <strong class="text-danger hand"> <%= scard.risk%> </strong>
+                    <% } %>
+                </div>
+            </div>
+
+            <hr>
+            <div class="card">
+                <div class="card-header">
+                  Observed activity
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title"><%= scard.observe %></h5>
+                  <p class="card-text hand text-primary"><%= scard.oremark%></p>
+                </div>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-header">
+                  Possible consequences
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title"><%= scard.conseq %></h5>
+                  <p class="card-text hand text-primary"><%= scard.cremark%></p>
+                </div>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-header">
+                  Action taken
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title"><%= scard.action %></h5>
+                  <p class="card-text hand text-primary"><%= scard.aremark%></p>
+                </div>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-header">
+                 Remark
+                </div>
+                <div class="card-body">
+                  <p class="card-text hand text-primary"><%= scard.remark%></p>
+                </div>
+            </div>
+            <hr>
+                <em>Card was created on:</em> <span class="badge badge-pill badge-light"><%= scard.date.toDateString()%></span> <em> by </em> <a href="/cards/user/<%=scard.uid%>"><%= scard.uid%></a> 
+                
+        </div>
+        
+      </div>
+      
+    </div>
+   
+</div>
+
+
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">User details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function goBack() {
+  window.history.back();
+}
+
+function printDiv(divName) {
+    var divText = document.getElementById(divName).outerHTML;
+    var win = window.open('','Print report');
+    win.document.write(divText);
+    //win.document.body.style.fontFamily="Abel, sans-serif";
+    win.print();
+    win.close();
+}
+</script>
